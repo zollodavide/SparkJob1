@@ -9,22 +9,28 @@ public class Parse {
 	public static Stock parseFile1(String line) throws ParseException{
 		
 		String[] parts = line.split(",");
-		Stock stock = new Stock();
-		stock.setTicker(parts[HistoricalStockPricesCostants.TICKER]);
-		stock.setPrezzoChiusura(Double.parseDouble(parts[HistoricalStockPricesCostants.CLOSE]));
-		stock.setPrezzoApertura(Double.parseDouble(parts[HistoricalStockPricesCostants.OPEN]));
-		stock.setMinPrezzo(Double.parseDouble(parts[HistoricalStockPricesCostants.LOWTHE]));
-		stock.setMaxPrezzo(Double.parseDouble(parts[HistoricalStockPricesCostants.HIGHTHE]));
-		stock.setVolume(Integer.parseInt(parts[HistoricalStockPricesCostants.VOLUME]));
+		Stock out = new Stock();
+		try {
+			
+				out.setTicker(parts[HistoricalStockPricesCostants.TICKER]);
+				out.setPrezzoChiusura(Double.parseDouble(parts[HistoricalStockPricesCostants.CLOSE]));
+				out.setPrezzoApertura(Double.parseDouble(parts[HistoricalStockPricesCostants.OPEN]));
+				out.setMinPrezzo(Double.parseDouble(parts[HistoricalStockPricesCostants.LOWTHE]));
+				out.setMaxPrezzo(Double.parseDouble(parts[HistoricalStockPricesCostants.HIGHTHE]));
+				out.setVolume(Integer.parseInt(parts[HistoricalStockPricesCostants.VOLUME]));
 		
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-		Date data;
+				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+				Date data;
+				
+				data = format.parse(parts[HistoricalStockPricesCostants.DATE]);
+				out.setData(data);
 		
-		data = format.parse(parts[HistoricalStockPricesCostants.DATE]);
-		stock.setData(data);
 		
-		
-		return stock;
+				return out;
+		}
+		catch(Exception e) {
+			return null;
+		}
 		
 		
 		

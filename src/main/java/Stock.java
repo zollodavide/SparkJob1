@@ -102,29 +102,6 @@ public class Stock implements Serializable{
 				getData();
 	}
 
-//	@Override
-//	public void write(DataOutput out) throws IOException {
-//		out.writeDouble(minPrezzo);
-//		out.writeDouble(maxPrezzo);
-//		out.writeInt(volume);
-//		out.writeDouble(prezzoChiusura);
-//		out.writeInt(anno);
-//		out.writeInt(mese);
-//		out.writeInt(giorno);
-//	}
-//
-//	@Override
-//	public void readFields(DataInput in) throws IOException {
-//		minPrezzo = in.readDouble();
-//		maxPrezzo = in.readDouble();
-//		volume = in.readInt();
-//		prezzoChiusura = in.readDouble();
-//		anno = in.readInt();
-//		mese = in.readInt();
-//		giorno = in.readInt();
-//		
-//	}
-
 
 	@Override
 	public int hashCode() {
