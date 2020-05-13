@@ -10,6 +10,8 @@ public class Parse {
 		
 		String[] parts = line.split(",");
 		Stock out = new Stock();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date data;
 		try {
 			
 				out.setTicker(parts[HistoricalStockPricesCostants.TICKER]);
@@ -17,20 +19,18 @@ public class Parse {
 				out.setPrezzoApertura(Double.parseDouble(parts[HistoricalStockPricesCostants.OPEN]));
 				out.setMinPrezzo(Double.parseDouble(parts[HistoricalStockPricesCostants.LOWTHE]));
 				out.setMaxPrezzo(Double.parseDouble(parts[HistoricalStockPricesCostants.HIGHTHE]));
-				out.setVolume(Integer.parseInt(parts[HistoricalStockPricesCostants.VOLUME]));
-		
-				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-				Date data;
-				
+				out.setVolume(Long.parseLong(parts[HistoricalStockPricesCostants.VOLUME]));
 				data = format.parse(parts[HistoricalStockPricesCostants.DATE]);
 				out.setData(data);
 		
 		
-				return out;
+				
 		}
 		catch(Exception e) {
 			return null;
 		}
+		
+		return out;
 		
 		
 		

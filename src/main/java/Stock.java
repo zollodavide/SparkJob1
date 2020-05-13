@@ -1,145 +1,99 @@
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.io.Serializable;
+
+
 import java.util.Date;
 
-import org.apache.hadoop.io.Writable;
+import scala.Serializable;
+
 
 public class Stock implements Serializable{
 	
+	private static final long serialVersionUID = 132449349384928L;
 	private String ticker;
-	private double minPrezzo;
-	private double maxPrezzo;
-	private int volume;
-	private double prezzoChiusura;
-	private double prezzoApertura;
+	private Double minPrezzo;
+	private Double maxPrezzo;
+	private Long volume;
+	private Double prezzoChiusura;
+	private Double prezzoApertura;
 	private Date data;
 	
 
-	public Stock(String ticker, double minPrezzo, double maxPrezzo, int volume, double prezzoChiusura,double prezzoApertura, Date data) {
-		super();
-		this.ticker = ticker;
-		this.minPrezzo = minPrezzo;
-		this.maxPrezzo = maxPrezzo;
-		this.volume = volume;
-		this.prezzoChiusura = prezzoChiusura;
-		this.prezzoApertura = prezzoApertura;
-		this.data = data;
-	}
-
-	
 	public Stock() {
-		super();
-	}
-	
-	public void setData(Date data) {
-		this.data = data;
-	}
-	
-	public Date getData() {
-		return data;
-	}
-	
-	
-	public void setTicker(String ticker) {
-		this.ticker = ticker;
 		
 	}
-	
+
+
 	public String getTicker() {
 		return ticker;
 	}
 
 
+	public void setTicker(String ticker) {
+		this.ticker = ticker;
+	}
 
 
-	public double getMinPrezzo() {
+	public Double getMinPrezzo() {
 		return minPrezzo;
 	}
 
-	public void setMinPrezzo(double minPrezzo) {
+
+	public void setMinPrezzo(Double minPrezzo) {
 		this.minPrezzo = minPrezzo;
 	}
 
-	public double getMaxPrezzo() {
+
+	public Double getMaxPrezzo() {
 		return maxPrezzo;
 	}
 
-	public void setMaxPrezzo(double maxPrezzo) {
+
+	public void setMaxPrezzo(Double maxPrezzo) {
 		this.maxPrezzo = maxPrezzo;
 	}
 
-	public int getVolume() {
+
+	public Long getVolume() {
 		return volume;
 	}
 
-	public void setVolume(int volume) {
+
+	public void setVolume(Long volume) {
 		this.volume = volume;
 	}
-	
-	public double getPrezzoApertura() {
-		return prezzoApertura;
-	}
-	
-	public void setPrezzoApertura(double prezzoApertura) {
-		this.prezzoApertura = prezzoApertura;
-	}
 
-	public double getPrezzoChiusura() {
+
+	public Double getPrezzoChiusura() {
 		return prezzoChiusura;
 	}
-	
-	public void setPrezzoChiusura(double prezzoChiusura) {
+
+
+	public void setPrezzoChiusura(Double prezzoChiusura) {
 		this.prezzoChiusura = prezzoChiusura;
 	}
 
+
+	public Double getPrezzoApertura() {
+		return prezzoApertura;
+	}
+
+
+	public void setPrezzoApertura(Double prezzoApertura) {
+		this.prezzoApertura = prezzoApertura;
+	}
+
+
+	public Date getData() {
+		return data;
+	}
+
+
+	public void setData(Date data) {
+		this.data = data;
+	}
+
+
 	
+
 	
-	@Override 
-	public String toString() {
-		return getMinPrezzo()+ "," + getMaxPrezzo()+ "," +getPrezzoChiusura()+ "," +getVolume()+ "," +
-				getData();
-	}
-
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		
-		long temp;
-		temp = Double.doubleToLongBits(maxPrezzo);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(minPrezzo);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(prezzoChiusura);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + volume;
-		return result;
-	}
-
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Stock other = (Stock) obj;
-		
-		if (Double.doubleToLongBits(maxPrezzo) != Double.doubleToLongBits(other.maxPrezzo))
-			return false;
-		if (Double.doubleToLongBits(minPrezzo) != Double.doubleToLongBits(other.minPrezzo))
-			return false;
-		if (Double.doubleToLongBits(prezzoChiusura) != Double.doubleToLongBits(other.prezzoChiusura))
-			return false;
-		if (volume != other.volume)
-			return false;
-		return true;
-	}
-
 
 }
