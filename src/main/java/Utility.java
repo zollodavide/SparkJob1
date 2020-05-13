@@ -38,12 +38,14 @@ public class Utility {
 	}
 	
 	public static Stock maxDate (Stock a, Stock b) {
-		if(a.getData().compareTo(b.getData())<0) {
-			return b;
+		if(a.getData().compareTo(b.getData())> 0) {
+			return a;
 			
 		}
 		else {
-			return a;
+			return b;
 		}
 	}
+	
+	
 }

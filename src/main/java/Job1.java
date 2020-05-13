@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Map;
 
 import org.apache.parquet.it.unimi.dsi.fastutil.Arrays;
@@ -6,6 +7,7 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.sparkproject.guava.collect.Sets;
 
 import scala.Tuple2;
 
@@ -31,6 +33,8 @@ public class Job1  {
 		return Job1Data;
 			 
 	 }
+	
+
 	
 //	private JavaPairRDD<String, Double> minPrices(){
 //		
@@ -69,34 +73,61 @@ public class Job1  {
 //		return max;
 //	}
 //	
-	public JavaPairRDD<Tuple2<String,Integer>,Double>variationOdds(){
+//	public JavaPairRDD<String,Double>variationOdds(){
+//		
+//		JavaRDD<Stock> Job1Data = buildStocks();
+//		
+//		//CON QUESTO RDD HO PRESO IL TICKER CON L'ANNO ASSOCIATO DI UN RELATIVO STOCK
+//		JavaPairRDD<String,Stock> st = Job1Data.mapToPair(stock -> new Tuple2<>(
+//			stock.getTicker(),stock));
+//		
+//		JavaPairRDD<String, Double> yearMinClose = st.reduceByKey((a,b) -> Utility.minDate(a, b))
+//				.mapToPair(tup -> new Tuple2(tup._1(), tup._2().getPrezzoChiusura()));
+//			
+//		JavaPairRDD<String, Double> yearMaxClose = st.reduceByKey((a,b) -> Utility.maxDate(a, b))
+//				.mapToPair(tup -> new Tuple2(tup._1(), tup._2().getPrezzoChiusura()));
+//		
+//		//Ora che ho tutti gli elementi devo svolgere l'operazione per il calcolo della variaizone Percentuale
+//		
+//		JavaPairRDD<String, Double>  yearMeanDifference = yearMinClose.join(yearMaxClose)
+//				.mapToPair(tup -> new Tuple2(tup._1(),((tup._2()._2() - tup._2()._1())/tup._2()._1())*100));
+//		
+//		Map<String,Double> mapDifference = yearMeanDifference.collectAsMap();
+//		
+//		for (String pd : mapDifference.keySet()) {
+//			System.out.println(pd + ":" + mapDifference.get(pd));
+//		}
+//		
+//		
+//		return yearMeanDifference;
+//		
+//		
+//	}
+	
+	public JavaPairRDD<String,Long> meanVolume (){
 		
 		JavaRDD<Stock> Job1Data = buildStocks();
-		//CON QUESTO RDD HO PRESO IL TICKER CON L'ANNO ASSOCIATO DI UN RELATIVO STOCK
-		JavaPairRDD<Tuple2<String,Integer>,Stock> st = Job1Data.mapToPair(stock -> new Tuple2<>(
-			new Tuple2<>(stock.getTicker(),stock.getData().getYear()+1900),stock));
+	
+		JavaPairRDD<String,Integer> numVolumi = Job1Data.mapToPair
+				(stock -> new Tuple2<>(stock.getTicker(), stock.getVolume()))
+				.groupByKey()
+				.mapToPair(tup -> new Tuple2<>(tup._1(),Sets.newHashSet(tup._2()).size() ));
 		
-		JavaPairRDD<Tuple2<String, Integer>, Double> yearMinClose = st.reduceByKey((a,b) -> Utility.minDate(a, b))
-				.mapToPair(tup -> new Tuple2(tup._1(), tup._2().getPrezzoChiusura()));
-			
-		JavaPairRDD<Tuple2<String,Integer>, Double> yearMaxClose = st.reduceByKey((a,b) -> Utility.maxDate(a, b))
-				.mapToPair(tup -> new Tuple2(tup._1(), tup._2().getPrezzoChiusura()));
+		JavaPairRDD<String, Long> totVolume = Job1Data.mapToPair(stock -> new Tuple2<>(
+			stock.getTicker(), stock.getVolume()))
+			.reduceByKey((a,b) -> a+b);
 		
-		//Ora che ho tutti gli elementi devo svolgere l'operazione per il calcolo della variaizone Percentuale
+		JavaPairRDD<String ,Long> tickerMeanVolume = totVolume.join(numVolumi)
+				.mapToPair(tup -> new Tuple2<>(tup._1(), tup._2()._1()/tup._2()._2()));
 		
-		JavaPairRDD<Tuple2<String,Integer>, Double>  yearMeanDifference = yearMinClose.join(yearMaxClose)
-				.mapToPair(tup -> new Tuple2(tup._1(),((tup._2()._2() - tup._2()._1())/tup._2()._1())*100));
+		Map<String,Long> volume = tickerMeanVolume.collectAsMap();
 		
-		Map<Tuple2<String,Integer>,Double> mapDifference = yearMeanDifference.collectAsMap();
-		
-		for (Tuple2<String,Integer> pd : mapDifference.keySet()) {
-			System.out.println(pd + ":" + mapDifference.get(pd));
+		for(String tick : volume.keySet()) {
+			System.out.println(tick + ":" + volume.get(tick));
 		}
 		
-		
-		return yearMeanDifference;
-		
-		
+		return tickerMeanVolume;
+			
 	}
 	
 	
