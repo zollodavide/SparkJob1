@@ -47,27 +47,33 @@ public class Job1  {
 		
 		JavaPairRDD<String, String> output =minPrices
 				.join(maxPrices)
-				.mapToPair(tup -> new Tuple2<>("Ticker: " +tup._1(),
-						", Min Prices: " +  tup._2()._1()
-						+", MaxPrices : " + tup._2()._2()));
-		JavaPairRDD<String, String> output2 = output
 				.join(variationOdds)
-				.mapToPair(tup -> new Tuple2<>(tup._1(),tup._2()._1() + ",Variazione Percentuale: "+ tup._2()._2()));
-		
-		JavaPairRDD<String,String> output3 = output2
 				.join(meanVolume)
-				.mapToPair(tup -> new Tuple2<>(tup._1(), tup._2()._1() + "%, Volume Medio: " + tup._2()._2()));
+				.mapToPair(tup -> new Tuple2<>("Ticker: " +tup._1(),
+						",Min Prices and Max Prices : "+ (tup._2()._1()._1())
+						+",Variazione Percentuale:" + (tup._2()._1()._2())
+						+"%,Media dei Volumi :"+ (tup._2()._2())
+						
+						//+ ", Variation Odds :"
+						));
+//		JavaPairRDD<String, String> output2 = output
+//				.join(variationOdds)
+//				.mapToPair(tup -> new Tuple2<>(tup._1(),tup._2()._1() + ",Variazione Percentuale: "+ tup._2()._2()));
 		
+//		JavaPairRDD<String,String> output3 = output2
+//				.join(meanVolume)
+//				.mapToPair(tup -> new Tuple2<>(tup._1(), tup._2()._1() + "%, Volume Medio: " + tup._2()._2()));
+//		
 						 
 
 		
-		stampa(output3);
+		stampa(output);
 	
 	
 	}
 
-	private void stampa(JavaPairRDD<String,String> output3) {
-		Map<String,String> out = output3.collectAsMap();
+	private void stampa(JavaPairRDD<String,String> output) {
+		Map<String,String> out = output.collectAsMap();
 		System.out.println("");
 		System.out.println("");
 		System.out.println("");
@@ -179,7 +185,7 @@ public class Job1  {
 	}
 	
 	
-	
+
 		
 	
 
