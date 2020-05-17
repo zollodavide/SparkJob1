@@ -129,7 +129,7 @@ public class Job1  {
 		
 		
 		//CON QUESTO RDD HO PRESO IL TICKER CON L'ANNO ASSOCIATO DI UN RELATIVO STOCK
-		JavaPairRDD<String,Stock> st = Job1Data.mapToPair(stock -> new Tuple2<>(			stock.getTicker(),stock));
+		JavaPairRDD<String,Stock> st = Job1Data.mapToPair(stock -> new Tuple2<>(stock.getTicker(),stock));
 	
 		JavaPairRDD<String, Double> yearMinClose = st.reduceByKey((a,b) -> Utility.minDate(a, b))
 				.mapToPair(tup -> new Tuple2(tup._1(), tup._2().getPrezzoChiusura()));
@@ -168,6 +168,7 @@ public class Job1  {
 		JavaPairRDD<String ,Long> tickerMeanVolume = totVolume.join(numVolumi)
 				.mapToPair(tup -> new Tuple2<>(tup._1(), tup._2()._1()/tup._2()._2()));
 		
+		
 		Map<String,Long> volume = tickerMeanVolume.collectAsMap();
 		
 		Map<String, Long> sorted = volume
@@ -179,10 +180,16 @@ public class Job1  {
 		                LinkedHashMap::new));
 		
 		
+		//JavaRDD<Map<String,Long>> sortedVolume = Job1Data.map(stock -> sorted);
+		
+		
+		
+		
 		
 		return tickerMeanVolume;
 			
 	}
+	
 	
 	
 
